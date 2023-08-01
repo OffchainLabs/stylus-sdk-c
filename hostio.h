@@ -303,6 +303,14 @@ extern __attribute__((VM_HOOKS, import_name("tx_ink_price"))) uint64_t tx_ink_pr
 /// [`ORIGIN`]: https://www.evm.codes/#32
 extern __attribute__((VM_HOOKS, import_name("tx_origin"))) void tx_origin(uint8_t * origin);
 
+/// Prints a 32-bit floating point number to the console, Only available in debug mode with
+/// floating point enabled.
+extern __attribute__((CONSOLE, import_name("log_f32"))) void log_f32(float * value);
+
+/// Prints a 64-bit floating point number to the console, Only available in debug mode with
+/// floating point enabled.
+extern __attribute__((CONSOLE, import_name("log_f64"))) void log_f64(double * value);
+
 /// Prints a 32-bit integer to the console, which can be either signed or unsigned.
 /// Only available in debug mode.
 extern __attribute__((CONSOLE, import_name("log_i32"))) void log_i32(int32_t * value);
