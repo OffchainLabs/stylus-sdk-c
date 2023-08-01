@@ -7,15 +7,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "hostio.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define USER_HOST import_module("vm_hooks")
-
-extern __attribute__((USER_HOST, import_name("read_args"))) void read_args(const uint8_t * data);
-extern __attribute__((USER_HOST, import_name("write_result"))) void write_result(const uint8_t * data, size_t len);
-extern __attribute__((USER_HOST, import_name("memory_grow"))) void memory_grow(uint32_t pages);
 
 typedef enum ArbStatus {
     Success = 0,
