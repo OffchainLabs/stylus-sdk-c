@@ -1,8 +1,8 @@
 // Copyright 2022-2023, Offchain Labs, Inc.
 // For licensing, see https://github.com/stylus-sdk-c/blob/stylus/licenses/COPYRIGHT.md
 
-#ifndef STYLUS_HOSTIO_HEADER_GUARD
-#define STYLUS_HOSTIO_HEADER_GUARD
+#ifndef STYLUS_HOSTIO_H
+#define STYLUS_HOSTIO_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -396,4 +396,4 @@ CONSOLE(log_txt) void log_txt(const uint8_t * text, size_t len);
 }
 #endif
 
-#endif //STYLUS_HOSTIO_HEADER_GUARD
+#endif

@@ -1,8 +1,8 @@
 // Copyright 2022-2023, Offchain Labs, Inc.
 // For licensing, see https://github.com/stylus-sdk-c/blob/stylus/licenses/COPYRIGHT.md
 
-#ifndef ARBITRUM_HEADER_GUARD
-#define ARBITRUM_HEADER_GUARD
+#ifndef STYLUS_STYLUS_H
+#define STYLUS_STYLUS_H
 
 #include <stddef.h>
 #include <stdint.h>
