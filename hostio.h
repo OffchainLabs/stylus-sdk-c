@@ -245,7 +245,7 @@ VM_HOOK(evm_gas_left) uint64_t evm_gas_left();
 VM_HOOK(evm_ink_left) uint64_t evm_ink_left();
 
 /**
- * The `arbitrum_main!` macro handles importing this hostio, which is required if the
+ * The `ENTRYPOINT` macro handles importing this hostio, which is required if the
  * program's memory grows. Otherwise compilation through the `ArbWasm` precompile will revert.
  * Internally the Stylus VM forces calls to this hostio whenever new WASM pages are allocated.
  * Calls made voluntarily will unproductively consume gas.
@@ -302,7 +302,7 @@ VM_HOOK(read_return_data) size_t read_return_data(uint8_t * dest, size_t offset,
 /**
  * Writes the final return data. If not called before the program exists, the return data will
  * be 0 bytes long. Note that this hostio does not cause the program to exit, which happens
- * naturally when the `arbitrum_main` entry-point returns.
+ * naturally when [`user_entrypoint`] returns.
  */
 VM_HOOK(write_result) void write_result(const uint8_t * data, size_t len);
 

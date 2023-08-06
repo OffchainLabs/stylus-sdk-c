@@ -24,7 +24,7 @@ typedef struct ArbResult {
     const size_t output_len;
 } ArbResult;
 
-#define ARBITRUM_MAIN(user_main)                                        \
+#define ENTRYPOINT(user_main)                                           \
     /* Force the compiler to import these symbols                    */ \
     /* Note: calling these functions will unproductively consume gas */ \
     __attribute__((export_name("mark_used")))                           \
@@ -32,8 +32,8 @@ typedef struct ArbResult {
         memory_grow(0);                                                 \
     }                                                                   \
                                                                         \
-    __attribute__((export_name("arbitrum_main")))                       \
-    int arbitrum_main(int args_len) {                                   \
+    __attribute__((export_name("user_entrypoint")))                     \
+    int user_entrypoint(size_t args_len) {                              \
         const uint8_t args[args_len];                                   \
         read_args(args);                                                \
         const ArbResult result = user_main(args, args_len);             \
