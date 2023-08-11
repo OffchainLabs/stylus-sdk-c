@@ -66,7 +66,7 @@ VM_HOOK(block_basefee) void block_basefee(uint8_t * basefee);
  * 
  * [`CHAIN_ID`]: https://www.evm.codes/#46
  */
-VM_HOOK(chainid) void chainid(uint8_t * chainid);
+VM_HOOK(chainid) uint64_t chainid();
 
 /**
  * Gets the coinbase of the current block, which on Arbitrum chains is the L1 batch poster's
@@ -93,7 +93,7 @@ VM_HOOK(block_gas_limit) uint64_t block_gas_limit();
  * 
  * [`Block Numbers and Time`]: https://developer.arbitrum.io/time
  */
-VM_HOOK(block_number) void block_number(uint8_t * number);
+VM_HOOK(block_number) uint64_t block_number();
 
 /**
  * Gets a bounded estimate of the Unix timestamp at which the Sequencer sequenced the
