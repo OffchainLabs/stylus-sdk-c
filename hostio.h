@@ -93,7 +93,7 @@ VM_HOOK(block_gas_limit) uint64_t block_gas_limit();
  * 
  * [`Block Numbers and Time`]: https://developer.arbitrum.io/time
  */
-VM_HOOK(block_number) void block_number(uint8_t * number);
+VM_HOOK(block_number) uint64_t block_number();
 
 /**
  * Gets a bounded estimate of the Unix timestamp at which the Sequencer sequenced the
