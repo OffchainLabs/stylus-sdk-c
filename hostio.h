@@ -138,6 +138,20 @@ VM_HOOK(call_contract) uint8_t call_contract(
 VM_HOOK(contract_address) void contract_address(uint8_t * address);
 
 /**
+ * Gets memory footprint of the wasm contract
+ *
+ * [`Stylus Memory`]: https://developer.arbitrum.io/TODO
+ */
+VM_HOOK(contract_footprint) uint32_t contract_footprint();
+
+/**
+ * Gets uncompressed size of the wasm contract
+ *
+ * [`Stylus Memory`]: https://developer.arbitrum.io/TODO
+ */
+VM_HOOK(contract_wasm_size) uint32_t contract_wasm_size();
+
+/**
  * Deploys a new contract using the init code provided, which the EVM executes to construct
  * the code of the newly deployed contract. The init code must be written in EVM bytecode, but
  * the code it deploys can be that of a Stylus program. The code returned will be treated as
