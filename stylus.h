@@ -34,7 +34,7 @@ typedef struct ArbResult {
                                                                         \
     __attribute__((export_name("user_entrypoint")))                     \
     int user_entrypoint(size_t args_len) {                              \
-        const uint8_t args[args_len];                                   \
+        uint8_t args[args_len];                                         \
         read_args(args);                                                \
         const ArbResult result = user_main(args, args_len);             \
         write_result(result.output, result.output_len);                 \
