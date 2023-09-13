@@ -34,13 +34,13 @@ CONSOLE(log_f64) void log_f64(double * value);
  * Prints a 32-bit integer to the console, which can be either signed or unsigned.
  * Only available in debug mode.
  */
-CONSOLE(log_i32) void log_i32(int32_t * value);
+CONSOLE(log_i32) void log_i32(int32_t value);
 
 /**
  * Prints a 64-bit integer to the console, which can be either signed or unsigned.
  * Only available in debug mode.
  */
-CONSOLE(log_i64) void log_i64(int64_t * value);
+CONSOLE(log_i64) void log_i64(int64_t value);
 
 /**
  * Prints a UTF-8 encoded string to the console. Only available in debug mode.
