@@ -7,7 +7,7 @@
 // For C programs that use the standard library, cross compile clang with wasi if your compiler doesn't support it
 //     https://github.com/WebAssembly/wasi-sdk
 
-#include "../../stylus_entry.h"
+#include "stylus_entry.h"
 
 // siphash impl from siphash.c
 extern uint64_t siphash24(const void *src, unsigned long len, const uint8_t key[16]);
