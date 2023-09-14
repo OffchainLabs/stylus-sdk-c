@@ -4,6 +4,13 @@
 #ifndef __STYLUS_TYPES_H
 #define __STYLUS_TYPES_H
 
+/**
+ * stylus_types.h defines types used by generated and entrypoint c- macros
+ *
+ * requires: -
+ * c-file: -
+ */
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -16,15 +23,22 @@ typedef enum ArbStatus {
     Failure,
 } ArbStatus;
 
+/**
+ * Status = Failure is used to signify a revert
+ * Rever or success may both return data to caller
+ */
 typedef struct ArbResult {
     const ArbStatus status;
     const uint8_t * output;
     const size_t output_len;
 } ArbResult;
 
-// this will revert execution without data by causing an error
+/**
+ * This will create a revert by causing a machine error.
+ * There will be no returned data for this event.
+ */
 inline void revert() {
-    asm("unreachable"); // causes a mchine error that revers the transaction
+    asm("unreachable");
 }
 
 #ifdef __cplusplus

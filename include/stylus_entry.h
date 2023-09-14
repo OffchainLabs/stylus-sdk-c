@@ -4,6 +4,14 @@
 #ifndef __STYLUS_ENTRY_H
 #define __STYLUS_ENTRY_H
 
+/**
+ * This defines the entrypoint to a smart contract.
+ * Only one file per wasm is expected to have an entrypoint
+ *
+ * requires: stylus_types.h
+ * c-file: -
+ */
+
 #include <stddef.h>
 #include <stdint.h>
 

@@ -7,33 +7,57 @@
 #include <bebi.h>
 #include <hostio.h>
 
+/**
+ * Storage.h creates tools that help access storage from a c-sdk contract
+ * 
+ * These user is still required to understad solidity storage and use accordingly
+ * See: https://docs.soliditylang.org/en/v0.8.20/internals/layout_in_storage.html
+ *
+ * requires: bebi.h (string.h)
+ * c-file: storage.c
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// base slot for array which is has allocated storage slot
-// (this is just native keccak of storage into base_out)
-void array_base_slot(bebi32 const storage, bebi32 base_out);
-
-// calculate storage location inside array.
-// base here is location of first value, so the output from array_base_slot
-int array_slot_offset(bebi32 const base, size_t val_size, uint64_t index, bebi32 slot_out, size_t *offset_out);
-
-// calculate slot for a map to put "key"
-// If key requires padding it must be applied before calling this function
-void map_slot(bebi32 const storage, uint8_t const *key, size_t key_len, bebi32 slot_out);
-
-// storage pointer is not currently used
-// passing it is used to keep track of pure/mutating/non-mutating functions
+/**
+ * storage_load / store load or store a value from storage accordingly.
+ * 
+ * The value of the first "storage" pointer is not used.
+ * generated headers provide:
+ *  a const storage pointer when working for a view-only function
+ *  a non const pointer for a mutating function
+ *  no pointer (so don't call storage_load) for a pure function
+ *
+ */
 inline void storage_load(const void* storage, const uint8_t *key, uint8_t *dest) {
     storage_load_bytes32(key, dest);
 }
 
-// storage pointer is not currently used
-// passing it is used to keep track of pure/mutating/non-mutating functions
+/**
+ * see documentation for storage_load
+ */
 inline void storage_store(void *storage, const uint8_t *key, const uint8_t *value) {
     storage_store_bytes32(key, value);
 }
+
+/**
+ * calculate slot for a map with base slot "storage" to put "key"
+ * If key requires padding it must be applied before calling this function
+ */
+void map_slot(bebi32 const storage, uint8_t const *key, size_t key_len, bebi32 slot_out);
+
+/**
+ * calculate slot and offset for an array with base slot "slot"
+ */
+int array_slot_offset(bebi32 const base, size_t val_size, uint64_t index, bebi32 slot_out, size_t *offset_out);
+
+/**
+ * calculate the base slot for a dynamic array with storage-slot "storage"
+ * (this is just native keccak of storage into base_out)
+ */
+void dynamic_array_base_slot(bebi32 const storage, bebi32 base_out);
 
 #ifdef __cplusplus
 }

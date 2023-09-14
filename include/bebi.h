@@ -2,10 +2,6 @@
 #ifndef __BEBI_H
 #define __BEBI_H
 
-#include <stddef.h>
-#include <stdint.h>
-#include <stdbool.h>
-
 /**
  * BEBI stands for Big Endian Big Int
  *
@@ -18,6 +14,10 @@
  * c-file: bebi.c
  * requires: string.h
  */
+
+#include <stddef.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {

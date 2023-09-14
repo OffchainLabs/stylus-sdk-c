@@ -24,7 +24,7 @@ int array_slot_offset(bebi32 const base, size_t val_size, uint64_t index, bebi32
     return 0;
 }
 
-void array_base_slot(bebi32 const storage, bebi32 base_out) {
+void dynamic_array_base_slot(bebi32 const storage, bebi32 base_out) {
     native_keccak256(storage, 32, base_out);
 }
 
