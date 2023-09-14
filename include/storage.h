@@ -5,6 +5,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <bebi.h>
+#include <hostio.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,6 +22,18 @@ int array_slot_offset(bebi32 const base, size_t val_size, uint64_t index, bebi32
 // calculate slot for a map to put "key"
 // If key requires padding it must be applied before calling this function
 void map_slot(bebi32 const storage, uint8_t const *key, size_t key_len, bebi32 slot_out);
+
+// storage pointer is not currently used
+// passing it is used to keep track of pure/mutating/non-mutating functions
+inline void storage_load(const void* storage, const uint8_t *key, uint8_t *dest) {
+    storage_load_bytes32(key, dest);
+}
+
+// storage pointer is not currently used
+// passing it is used to keep track of pure/mutating/non-mutating functions
+inline void storage_store(void *storage, const uint8_t *key, const uint8_t *value) {
+    storage_store_bytes32(key, value);
+}
 
 #ifdef __cplusplus
 }
