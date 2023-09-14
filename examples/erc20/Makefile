@@ -2,7 +2,7 @@
 STACK_SIZE=1024
 CC=clang
 LD=wasm-ld
-CFLAGS=-I../../include/ -Iinterface-gen/ --target=wasm32 -Os --no-standard-libraries -mbulk-memory -Wall
+CFLAGS=-I../../include/ -Iinterface-gen/ --target=wasm32 -Os --no-standard-libraries -mbulk-memory -Wall -g
 LDFLAGS=-O2 --no-entry --stack-first -z stack-size=$(STACK_SIZE) -Bstatic
 
 OBJECTS=build/impl.o build/lib/bebi.o build/lib/storage.o build/lib/simplelib.o build/lib/utils.o build/gen/ERC20_main.o
@@ -25,16 +25,19 @@ interface-gen/erc20/ERC20_main.c: cargo-generate
 
 cargo-generate: build/interface.json
 	mkdir -p build
-	cargo-stylus c-headers $< interface-gen
+	cargo-stylus c-gen $< interface-gen
 
 build/interface.json: interface_compile.json erc20.sol
 	mkdir -p build
 	cat $< | solc --standard-json --pretty-json > $@
 
 build/erc20.wasm: $(OBJECTS)
-	$(LD) $(LDFLAGS) $(OBJECTS) -o $@ --Map=build/sample.map
+	$(LD) $(LDFLAGS) $(OBJECTS) -o $@
 
 erc20.wasm: build/erc20.wasm
 	wasm-strip -o $@ $<
 
-.phony: all cargo-generate
+clean:
+	rm -rf interface-gen build erc20.wasm
+
+.phony: all cargo-generate clean
