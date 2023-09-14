@@ -56,13 +56,13 @@ abstract contract ERC20 {
     error ERC20FailedDecreaseAllowance(address spender, uint256 currentAllowance, uint256 requestedDecrease);
 
 
-    function name() public view virtual returns (string memory);
+    function name() public pure virtual returns (string memory);
 
     /**
      * @dev Returns the symbol of the token, usually a shorter version of the
      * name.
      */
-    function symbol() public view virtual returns (string memory);
+    function symbol() public pure virtual returns (string memory);
 
     /**
      * @dev Returns the number of decimals used to get its user representation.
@@ -77,7 +77,7 @@ abstract contract ERC20 {
      * no way affects any of the arithmetic of the contract, including
      * {IERC20-balanceOf} and {IERC20-transfer}.
      */
-    function decimals() public view virtual returns (uint8);
+    function decimals() public pure virtual returns (uint8);
 
     /**
      * @dev See {IERC20-totalSupply}.
