@@ -7,7 +7,8 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <stylus.h>
+#include <stylus_types.h>
+#include <hostio.h>
 #include <bebi.h>
 
 #ifdef __cplusplus

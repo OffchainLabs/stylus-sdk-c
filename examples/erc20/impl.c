@@ -1,5 +1,5 @@
 #include <string.h>
-#include <stylus.h>
+#include <stylus_types.h>
 #include <bebi.h>
 #include <erc20/ERC20.h>
 #include <storage.h>
