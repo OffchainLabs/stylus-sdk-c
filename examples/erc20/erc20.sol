@@ -1,170 +1,148 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v4.9.0) (token/ERC20/ERC20.sol)
+
+/**
+ * Solidity interface - declaration
+ *
+ * Interface is inspired by ERC20, with minters that can be added/removed by
+ * other minters
+ *
+ * Documentation in this file does not explain the ABI or contract, but how 
+ * c-code is generated from the solidity.
+ * This file will be compiled by solidity compiler and used to generate:
+ *   * ABI that can be used by any web3 client
+ *   * C code frameork (headers and main function) for the smart contract
+ *
+ * Also see: Makefile, interface_compile.json
+ *
+ * This file is based on the MIT-license implementation of ERC20 by OpenZepplin
+ * See original implementation: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol
+ * Original License: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/LICENSE
+ */
 
 pragma solidity ^0.8.20;
 
-
 /**
- * @dev Implementation of the {IERC20} interface.
+ * Name of the contract will set name of files generated. Name of the solidity file
+ * in interface_compile.json sets the name of the directory.
+ * This will create: erc20/ERC20.h and erc20/ERC20_main.c
  *
- * This implementation is agnostic to the way tokens are created. This means
- * that a supply mechanism has to be added in a derived contract using {_mint}.
+ * abstract contract can contain functios without implementation. 
  *
- * TIP: For a detailed writeup see our guide
- * https://forum.openzeppelin.com/t/how-to-implement-erc20-supply-mechanisms/226[How
- * to implement supply mechanisms].
- *
- * The default value of {decimals} is 18. To change this, you should override
- * this function so it returns a different value.
- *
- * We have followed general OpenZeppelin Contracts guidelines: functions revert
- * instead returning `false` on failure. This behavior is nonetheless
- * conventional and does not conflict with the expectations of ERC20
- * applications.
- *
- * Additionally, an {Approval} event is emitted on calls to {transferFrom}.
- * This allows applications to reconstruct the allowance for all accounts just
- * by listening to said events. Other implementations of the EIP may not emit
- * these events, as it isn't required by the specification.
- *
- * Finally, the non-standard {decreaseAllowance} and {increaseAllowance}
- * functions have been added to mitigate the well-known issues around setting
- * allowances. See {IERC20-approve}.
+ * generated c only cares about storage and function declarations as they appear here.
  */
 abstract contract ERC20 {
-    mapping(address account => uint256) private _balances;
+    /**
+     * PART I - storage
+     *
+     * in the generated .h file, two defines will be created for each storage variable:
+     * STORAGE_SLOT__* - 32-bytes initializer with the appropriate base_slot
+     * STORAGE_OFFSET__* - offset inside that slot for the variable
+     *
+     * see also:
+     *   *  https://docs.soliditylang.org/en/v0.8.20/internals/layout_in_storage.html
+     *   *  storage.h
+     */
 
-    mapping(address account => mapping(address spender => uint256)) private _allowances;
-
+    /**
+     * First variable is in slot zero. This will generate:
+     * #define STORAGE_SLOT__totalSupply {0x00, 0x00, ... 0x00, 0x00, 0x00}
+     */
     uint256 private _totalSupply;
 
-    address[] public minters;
-
+    /**
+     * All these variables share a slot. A STORAGE_SLOT_* define will be created for each, all are identical.
+     * The offsets generated, however, are not:
+     *
+     * #define STORAGE_OFFSET_minters_entries 0
+     * #define STORAGE_OFFSET_minters_current 8
+     * #define STORAGE_OFFSET_initialized 16
+     */
     uint64 public minters_entries;
     uint64 public minters_current;
     bool  initialized;
 
+    /**
+     * A dynamic array is based in keccak256(slot) instead of slot. Accordingly, slot geerated:
+     *
+     * #define STORAGE_SLOT_minters {0x40, 0x57, 0x87, ... 0xbb, 0x5a, 0xce}
+     */
+    address[] public minters;
+
+    /**
+     * for maps the base is not hashed. see storage.h for utils helping to calculate position of hashed values
+     */
+    mapping(address account => uint256) private _balances;
+
+    /**
+     * notice: defining a variable as public also creates a getter function (here: minter_idx(address) returns uint64)
+     * you will have to implement this function.
+     */
     mapping(address spender => uint64) public minter_idx;
+
+
+    /**
+     * PART II - functions
+     *
+     * Only need to define public/external fuctions for the ABI (no difference for our use).
+     * Define all functions virtual to avoid requiring a solidity implementation.
+     *
+     * The generated h file will contain declarations for all functions declared here and selectors
+     * for them.
+     * 
+     * The generated _main file will contain an entry point that parses the function selector and
+     * calls the appropriate function.
+     *
+     * The programmer's should implement the functions declared in the generated h-file.
+     *
+     * a default payable function will be called if input doesn't match any selector.
+     */
+
+    /*
+     * Pure functions should not access storage.
+     * This is the generated c declaration:
+     *
+     * ArbResult symbol(uint8_t *input, size_t len);
+     *
+     * see stylus_types for definition of ArbResult.
+     * input and input_length don't include the function selector
+     * the function should validate it's input and parse output accordingly
+     */
+    function name() public pure virtual returns (string memory);
+    function symbol() public pure virtual returns (string memory);
+    function decimals() public pure virtual returns (uint8);
+
+    /*
+     * A view function can read storage.
+     * This is the generated c declaration:
+     *
+     * ArbResult totalSupply(const void *storage, uint8_t *input, size_t len); // totalSupply()
+     *
+     * the storage pointer isn't really set or used, but should be passed to storage functions
+     * for compile-time verification that we should access storage. see storage.h
+     */
+    function totalSupply() public view virtual returns (uint256);
+    function balanceOf(address account) public view virtual returns (uint256);
+
+    /**
+     * a mutating functions gets a non-const storage pointer:
+     *
+     * ArbResult mint(void *storage, uint8_t *input, size_t len); // mint(address,uint256)
+     * 
+     * Notice again that apart from function-selector, the environment does not parse or
+     * encode any input/output variable unless explicitly done by the function implementor
+     */
+    function mint(address account, uint256 value) public virtual;
+
+    function transfer(address to, uint256 value) public virtual returns (bool);
 
     function init(address first_minter) public virtual;
     function add_minter(address new_minter) public virtual;
     function remove_minter(address old_minter) public virtual;
-    function mint(address account, uint256 value) public virtual;
-    /**
-     * @dev Indicates a failed `decreaseAllowance` request.
-     */
-    error ERC20FailedDecreaseAllowance(address spender, uint256 currentAllowance, uint256 requestedDecrease);
 
-
-    function name() public pure virtual returns (string memory);
-
-    /**
-     * @dev Returns the symbol of the token, usually a shorter version of the
-     * name.
-     */
-    function symbol() public pure virtual returns (string memory);
-
-    /**
-     * @dev Returns the number of decimals used to get its user representation.
-     * For example, if `decimals` equals `2`, a balance of `505` tokens should
-     * be displayed to a user as `5.05` (`505 / 10 ** 2`).
-     *
-     * Tokens usually opt for a value of 18, imitating the relationship between
-     * Ether and Wei. This is the default value returned by this function, unless
-     * it's overridden.
-     *
-     * NOTE: This information is only used for _display_ purposes: it in
-     * no way affects any of the arithmetic of the contract, including
-     * {IERC20-balanceOf} and {IERC20-transfer}.
-     */
-    function decimals() public pure virtual returns (uint8);
-
-    /**
-     * @dev See {IERC20-totalSupply}.
-     */
-    function totalSupply() public view virtual returns (uint256);
-
-    /**
-     * @dev See {IERC20-balanceOf}.
-     */
-    function balanceOf(address account) public view virtual returns (uint256);
-
-    /**
-     * @dev See {IERC20-transfer}.
-     *
-     * Requirements:
-     *
-     * - `to` cannot be the zero address.
-     * - the caller must have a balance of at least `value`.
-     */
-    function transfer(address to, uint256 value) public virtual returns (bool);
-
-    /**
-     * @dev See {IERC20-allowance}.
-     */
+    // TODO: complete the ERC20 interface
     // function allowance(address owner, address spender) public view virtual returns (uint256);
-
-    /**
-     * @dev See {IERC20-approve}.
-     *
-     * NOTE: If `value` is the maximum `uint256`, the allowance is not updated on
-     * `transferFrom`. This is semantically equivalent to an infinite approval.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
-     */
     // function approve(address spender, uint256 value) public virtual returns (bool);
-
-    /**
-     * @dev See {IERC20-transferFrom}.
-     *
-     * Emits an {Approval} event indicating the updated allowance. This is not
-     * required by the EIP. See the note at the beginning of {ERC20}.
-     *
-     * NOTE: Does not update the allowance if the current allowance
-     * is the maximum `uint256`.
-     *
-     * Requirements:
-     *
-     * - `from` and `to` cannot be the zero address.
-     * - `from` must have a balance of at least `value`.
-     * - the caller must have allowance for ``from``'s tokens of at least
-     * `value`.
-     */
     // function transferFrom(address from, address to, uint256 value) public virtual returns (bool);
-
-    /**
-     * @dev Atomically increases the allowance granted to `spender` by the caller.
-     *
-     * This is an alternative to {approve} that can be used as a mitigation for
-     * problems described in {IERC20-approve}.
-     *
-     * Emits an {Approval} event indicating the updated allowance.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
-     */
     // function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool);
-
-    /**
-     * @dev Atomically decreases the allowance granted to `spender` by the caller.
-     *
-     * This is an alternative to {approve} that can be used as a mitigation for
-     * problems described in {IERC20-approve}.
-     *
-     * Emits an {Approval} event indicating the updated allowance.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
-     * - `spender` must have allowance for the caller of at least
-     * `requestedDecrease`.
-     *
-     * NOTE: Although this function is designed to avoid double spending with {approval},
-     * it can still be frontrunned, preventing any attempt of allowance reduction.
-     */
     // function decreaseAllowance(address spender, uint256 requestedDecrease) public virtual returns (bool);
-
 }
