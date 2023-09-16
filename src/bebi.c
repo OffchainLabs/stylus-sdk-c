@@ -29,6 +29,11 @@ int bebi32_add_u64(bebi32 lhs, uint64_t rhs) {
     return bebi_add(lhs, 32, rhs_bebi, 8);
 }
 
+void bebi32_set_u8(bebi32 dst, uint8_t val) {
+    memset(dst, 0, 32-1);
+    bebi_set_u8(dst, 32-1, val);
+}
+
 void bebi32_set_u16(bebi32 dst, uint16_t val) {
     memset(dst, 0, 32-2);
     bebi_set_u16(dst, 32-2, val);
@@ -42,6 +47,10 @@ void bebi32_set_u32(bebi32 dst, uint32_t val) {
 void bebi32_set_u64(bebi32 dst, uint64_t val) {
     memset(dst, 0, 32-8);
     bebi_set_u64(dst, 32-8, val);
+}
+
+bool bebi32_is_u8(const bebi32 dst) {
+    return bebi_is_0(dst, 32-8);
 }
 
 bool bebi32_is_u16(const bebi32 dst) {

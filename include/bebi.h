@@ -95,10 +95,12 @@ uint16_t bebi32_get_u16(const bebi32 dst);
 uint32_t bebi32_get_u32(const bebi32 dst);
 uint64_t bebi32_get_u64(const bebi32 dst);
 
+void bebi32_set_u8(bebi32 dst, uint8_t val);
 void bebi32_set_u16(bebi32 dst, uint16_t val);
 void bebi32_set_u32(bebi32 dst, uint32_t val);
 void bebi32_set_u64(bebi32 dst, uint64_t val);
 
+bool bebi32_is_u8(const bebi32 dst);
 bool bebi32_is_u16(const bebi32 dst);
 bool bebi32_is_u32(const bebi32 dst);
 bool bebi32_is_u64(const bebi32 dst);
