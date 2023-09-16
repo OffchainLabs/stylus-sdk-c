@@ -50,6 +50,8 @@ void map_slot(bebi32 const storage, uint8_t const *key, size_t key_len, bebi32 s
 
 /**
  * calculate slot and offset for an array with base slot "slot"
+ * notice tht short byte-arrays and strings are not stored in base but in
+ * the "size" slot - see solidity spec
  */
 int array_slot_offset(bebi32 const base, size_t val_size, uint64_t index, bebi32 slot_out, size_t *offset_out);
 

@@ -30,8 +30,8 @@ void dynamic_array_base_slot(bebi32 const storage, bebi32 base_out) {
 
 void map_slot(bebi32 const storage, uint8_t const *key, size_t key_len, bebi32 slot_out) {
     uint8_t buf[32 + key_len];
-    memcpy(buf, storage, 32);
-    memcpy(buf+32, key, key_len);
+    memcpy(buf, key, key_len);
+    memcpy(buf+key_len, storage, 32);
     native_keccak256(buf, 32 + key_len, slot_out);
 }
 
