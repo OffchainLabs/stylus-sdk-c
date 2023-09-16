@@ -50,21 +50,23 @@ abstract contract ERC20 {
     uint256 private _totalSupply;
 
     /**
-     * All these variables share a slot. A STORAGE_SLOT_* define will be created for each, all are identical.
+     * Both these variables share a slot. A STORAGE_SLOT_* define will be created for each, all are identical.
      * The offsets generated, however, are not:
      *
-     * #define STORAGE_OFFSET_minters_entries 0
-     * #define STORAGE_OFFSET_minters_current 8
-     * #define STORAGE_OFFSET_initialized 16
+     * #define STORAGE_END_OFFSET_minters_current 32
+     * #define STORAGE_END_OFFSET_initialized 24
+     *
+     * These are offsets to the END of the values, as the name suggests, so the minters_current u64
+     * can be read from bytes [24-32), and the "initialized" boolean from the byte [23-24) 
      */
-    uint64 public minters_entries;
     uint64 public minters_current;
     bool  initialized;
 
     /**
-     * A dynamic array is based in keccak256(slot) instead of slot. Accordingly, slot geerated:
+     * A dynamic array stores it's size in (slot) and values starting in keccak256(slot)
+     * so in addition to the slot value, base is also generated in the header file:
      *
-     * #define STORAGE_SLOT_minters {0x40, 0x57, 0x87, ... 0xbb, 0x5a, 0xce}
+     * #define STORAGE_BASE_minters {0x40, 0x57, 0x87, ... 0xbb, 0x5a, 0xce}
      */
     address[] public minters;
 
@@ -75,7 +77,7 @@ abstract contract ERC20 {
 
     /**
      * notice: defining a variable as public also creates a getter function (here: minter_idx(address) returns uint64)
-     * you will have to implement this function.
+     * you will have to implement this function as well.
      */
     mapping(address spender => uint64) public minter_idx;
 

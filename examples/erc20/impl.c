@@ -14,31 +14,26 @@ ArbResult inline _success_bebi32(bebi32 const retval) {
     return res;
 }
 
-void inline load_shorts(const void *storage, uint64_t* minters_entries_out, uint64_t *minters_current_out, bool *initialized_out) {
-    bebi32 storage_slot = STORAGE_SLOT_minters_entries;
+void inline load_shorts(const void *storage, uint64_t *minters_current_out, bool *initialized_out) {
+    bebi32 storage_slot = STORAGE_SLOT_minters_current;
     bebi32 buf;
     storage_load(storage, storage_slot, buf);
-    if (minters_entries_out != NULL) {
-        uint64_t res = bebi_get_u64(buf, STORAGE_OFFSET_minters_entries);
-        *minters_entries_out = res;
-    }
     if (minters_current_out != NULL) {
-        uint64_t res = bebi_get_u64(buf, STORAGE_OFFSET_minters_current);
+        uint64_t res = bebi_get_u64(buf, STORAGE_END_OFFSET_minters_current - 8);
         *minters_current_out = res;
     }
     if (initialized_out != NULL) {
-        uint8_t res = bebi_get_u8(buf, STORAGE_OFFSET_initialized);
+        uint8_t res = bebi_get_u8(buf, STORAGE_END_OFFSET_initialized - 1);
         *initialized_out = (res != 0);
     }
 }
 
 // always initialized==1 when storing
-void inline store_shorts(void *storage, uint64_t minters_entries_out, uint64_t minters_current_out) {
-    bebi32 storage_slot = STORAGE_SLOT_minters_entries;
+void inline store_shorts(void *storage, uint64_t minters_current) {
+    bebi32 storage_slot = STORAGE_SLOT_minters_current;
     bebi32 buf;
-    bebi_set_u64(buf, STORAGE_OFFSET_minters_entries, minters_entries_out);
-    bebi_set_u64(buf, STORAGE_OFFSET_minters_current, minters_current_out);
-    bebi_set_u8(buf, STORAGE_OFFSET_initialized, 1);
+    bebi_set_u64(buf, STORAGE_END_OFFSET_minters_current - 8, minters_current);
+    bebi_set_u8(buf, STORAGE_END_OFFSET_initialized - 1, 1);
     storage_store(storage, storage_slot, buf);
 }
 
@@ -66,17 +61,29 @@ bool from_minter(const void *storage) {
     return  _minter_idx(storage, sender) != 0;
 }
 
-void add_minters_in_idx(void *storage, bebi32 minter, uint64_t index) {
-    bebi32 idx_slot;
-    minter_idx_storage_slot(minter, idx_slot);
-    bebi32 idx_bebi;
-    bebi32_set_u64(idx_bebi, index);
-    storage_store(storage, idx_slot, idx_bebi);
+void push_minter(void *storage, bebi32 minter) {
+    bebi32 array_size_slot = STORAGE_SLOT_minters;
+    bebi32 array_size;
+    storage_load(storage, array_size_slot, array_size);
+    if (!bebi32_is_u64(array_size)) {
+        revert();
+    }
+    uint64_t index = bebi32_get_u64(array_size);
+
+    if (!bebi32_is_0(minter)) {
+        bebi32 idx_slot;
+        minter_idx_storage_slot(minter, idx_slot);
+        bebi32 idx_bebi;
+        bebi32_set_u64(idx_bebi, index);
+        storage_store(storage, idx_slot, idx_bebi);
+    }
 
     bebi32 minters_slot;
-    bebi32 minters_base = STORAGE_SLOT_minters;
+    bebi32 minters_base = STORAGE_BASE_minters;
     array_slot_offset(minters_base, 32, index, minters_slot, NULL);
     storage_store(storage, minters_slot, minter);
+    bebi32_set_u64(array_size, index+1);
+    storage_store(storage, array_size_slot, array_size);
 }
 
 ArbResult default_func(void *storage, uint8_t *input, size_t len, bebi32 value) {
@@ -104,7 +111,7 @@ ArbResult symbol(uint8_t *input, size_t len) { // symbol()
 
 ArbResult minters_current(const void *storage, uint8_t *input, size_t len) { // minters_current()
     uint64_t minters_current;
-    load_shorts(storage, NULL, &minters_current, NULL);
+    load_shorts(storage, &minters_current, NULL);
     bebi32_set_u64(buf_out, minters_current);
     return _success_bebi32(buf_out);
 }
@@ -128,13 +135,13 @@ ArbResult remove_minter(void *storage, uint8_t *input, size_t len) { // remove_m
     bebi32 minters_slot;
     bebi32 minters_base = STORAGE_SLOT_minters;
     array_slot_offset(minters_base, 32, idx, minters_slot, NULL);
-    uint64_t minters_entries, minters_current;
-    load_shorts(storage, &minters_entries, &minters_current, NULL);
+    uint64_t minters_current;
+    load_shorts(storage, &minters_current, NULL);
     bebi32 zero;
     bebi32_set_u64(zero, 0);
     storage_store(storage, idx_slot, zero);
     storage_store(storage, minters_slot, zero);
-    store_shorts(storage, minters_entries, minters_current-1);
+    store_shorts(storage, minters_current-1);
     return _return_nodata(Success);
 }
 
@@ -145,14 +152,12 @@ ArbResult add_minter(void *storage, uint8_t *input, size_t len) { // add_minter(
     if (len != 32 || !bebi32_is_u160(input)) {
         return _return_nodata(Failure);
     }
-    uint64_t minters_entries, minters_current;
-    load_shorts(storage, &minters_entries, &minters_current, NULL);
-    minters_current += 1;
-    minters_entries +=1;
+    uint64_t minters_current;
+    load_shorts(storage, &minters_current, NULL);
 
-    add_minters_in_idx(storage, input, minters_entries);
-
-    store_shorts(storage, minters_entries, minters_current);
+    push_minter(storage, input);
+    minters_current +=1;
+    store_shorts(storage, minters_current);
     return _return_nodata(Success);
 }
 
@@ -196,13 +201,6 @@ ArbResult name(uint8_t *input, size_t len){ // name()
     return symbol(input, len);
 }
 
-ArbResult minters_entries(const void *storage, uint8_t *input, size_t len){ // minters_entries()
-    uint64_t minters_entries;
-    load_shorts(storage, &minters_entries, NULL, NULL);
-    bebi32_set_u64(buf_out, minters_entries);
-    return _success_bebi32(buf_out);
-}
-
 ArbResult transfer(void *storage, uint8_t *input, size_t len) { // transfer(address,uint256)
     if (len != 64) {
         return _return_nodata(Failure);
@@ -210,7 +208,9 @@ ArbResult transfer(void *storage, uint8_t *input, size_t len) { // transfer(addr
     uint8_t const *dest = input;
     uint8_t const *amount = (input + 32);
     if (!bebi32_is_u160(dest)) {
-        return _return_nodata(Failure);
+        // return false
+        bebi32_set_u8(buf_out, 0);
+        return _success_bebi32(buf_out);
     }
     log_i32(11);
     bebi32 sender;
@@ -234,7 +234,9 @@ ArbResult transfer(void *storage, uint8_t *input, size_t len) { // transfer(addr
     }
     storage_store(storage, balance_slot_buf, balance_buf);
 
-    return _return_nodata(Success);
+    // return true
+    bebi32_set_u8(buf_out, 1);
+    return _success_bebi32(buf_out);
 }
 
 ArbResult minter_idx(const void *storage, uint8_t *input, size_t len) { // minter_idx(address)
@@ -265,12 +267,14 @@ ArbResult init(void *storage, uint8_t *input, size_t len) { // init()
         return _return_short_string(Failure, "init: input");
     }
     bool initialized;
-    load_shorts(storage, NULL, NULL, &initialized);
+    load_shorts(storage, NULL, &initialized);
     if (initialized) {
         return _return_short_string(Failure, "init: initialized");
     }
-    add_minters_in_idx(storage, input, 1);
-    store_shorts(storage, 1, 1);
+    bebi32 zero_minter = {0};
+    push_minter(storage, zero_minter);
+    push_minter(storage, input);
+    store_shorts(storage, 1);
     return _return_nodata(Success);
 }
 
