@@ -25,7 +25,7 @@ typedef enum ArbStatus {
 
 /**
  * Status = Failure is used to signify a revert
- * Rever or success may both return data to caller
+ * Revert or success may both return data to caller
  */
 typedef struct ArbResult {
     const ArbStatus status;

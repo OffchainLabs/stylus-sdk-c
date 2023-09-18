@@ -10,7 +10,7 @@
 /**
  * Storage.h creates tools that help access storage from a c-sdk contract
  * 
- * These user is still required to understad solidity storage and use accordingly
+ * These user is still required to understand solidity storage and use accordingly
  * See: https://docs.soliditylang.org/en/v0.8.20/internals/layout_in_storage.html
  *
  * requires: bebi.h (string.h)

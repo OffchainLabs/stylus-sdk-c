@@ -75,7 +75,7 @@ inline bool bebi_is_zero(const bebi bebi, size_t size);
 
 /**
  * bebi32 is a specialized bebi of size 32, which is used a lot in solidity
- * there are no alignent requirements.
+ * there are no alignment requirements.
  */
 typedef uint8_t bebi32[32];
 

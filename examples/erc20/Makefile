@@ -28,7 +28,7 @@ build/gen/%.o: interface-gen/erc20/%.c
 	mkdir -p build/gen/
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Step 3.2: build the reuired library files
+# Step 3.2: build the reuqired library files
 build/lib/%.o: ../../src/%.c
 	mkdir -p build/lib
 	$(CC) $(CFLAGS) -c $< -o $@

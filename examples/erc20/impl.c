@@ -33,7 +33,7 @@
  * ABI to allow easy interaction with other contracts.
  * Storage compatibility is a matter of choice and standard.
  * The strongest argument for compatibility is it allows external tools
- * to find data easily, and it allows contract upgrades accross languages.
+ * to find data easily, and it allows contract upgrades across languages.
  *
  */
 
@@ -62,7 +62,7 @@ void inline load_shorts(const void *storage, uint64_t *minters_current_out, bool
     bebi32 buf;
     storage_load(storage, storage_slot, buf);
     if (minters_current_out != NULL) {
-        // END_OFFSET tells us where the value ends, we load from where it starts..
+        // END_OFFSET tells us where the value ends, we load from where it starts.
         uint64_t res = bebi_get_u64(buf, STORAGE_END_OFFSET_minters_current - sizeof(uint64_t));
         *minters_current_out = res;
     }
@@ -87,7 +87,7 @@ void minter_idx_storage_slot(bebi32 const minter, bebi32 slot_out) {
     map_slot(base, minter, 32, slot_out);
 }
 
-// calculate slot for malances map of an account
+// calculate slot for balances map of an account
 void balance_slot(bebi32 const account, bebi32 slot_out) {
     bebi32 base = STORAGE_SLOT__balances;
     map_slot(base, account, 32, slot_out);    
@@ -106,7 +106,7 @@ uint64_t _minter_idx(const void *storage, bebi32 const minter) {
 /**
  * Implementing the contract's API
  * 
- * These functions implemeent API defined by the solidity interface,
+ * These functions implement API defined by the solidity interface,
  * and/or have comparable implementation in equiv.sol
  */
 
@@ -152,7 +152,7 @@ ArbResult totalSupply(const void *storage, uint8_t *input, size_t len){ // total
     return _success_bebi32(buf_out);
 }
 
-// standard ERC20: a read accessot to the balances map
+// standard ERC20: a read accessor to the balances map
 ArbResult balanceOf(const void *storage, uint8_t *input, size_t len) { // balanceOf(address)
     // validate input is an address padded to 32 bytes
     if (len != 32) {
@@ -224,7 +224,7 @@ void push_minter(void *storage, bebi32 minter) {
     bebi32 array_size;
     storage_load(storage, array_size_slot, array_size);
     // in solidity array size is uint256 - but a going over 1<<64
-    // is not feasilbe, so for C we use a u64 index.
+    // is not feasible, so for C we use a u64 index.
     if (!bebi32_is_u64(array_size)) {
         revert();
     }
@@ -331,7 +331,7 @@ ArbResult remove_minter(void *storage, uint8_t *input, size_t len) { // remove_m
     bebi32 minters_slot;
     bebi32 minters_base = STORAGE_SLOT_minters;
     array_slot_offset(minters_base, 32, idx, minters_slot, NULL);
-    // strore 0 in the minters array
+    // store 0 in the minters array
     storage_store(storage, minters_slot, zero);
 
     // reduce minters_current count

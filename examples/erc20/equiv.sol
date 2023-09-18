@@ -24,7 +24,7 @@ contract Equivalent {
     // how many minters exist currently
     uint64 public minters_current;
     // has the contract been initialized
-    bool  initialized;
+    bool  private initialized;
 
     // array of minters
     // The array could hold blank values when removing a minter
@@ -86,7 +86,7 @@ contract Equivalent {
      *
      * Minters are kept in two databases: an array of all minters
      * (may contain blanks), and a map from minter to it's index
-     * in the array. Index 0 is always blenk so index 0 in the map
+     * in the array. Index 0 is always blank so index 0 in the map
      * is used to signify an address that's not a minter.
      */
 

@@ -10,7 +10,7 @@
  * c-code is generated from the solidity.
  * This file will be compiled by solidity compiler and used to generate:
  *   * ABI that can be used by any web3 client
- *   * C code frameork (headers and main function) for the smart contract
+ *   * C code framework (headers and main function) for the smart contract
  *
  * Also see: Makefile, interface_compile.json
  *
@@ -26,7 +26,7 @@ pragma solidity ^0.8.20;
  * in interface_compile.json sets the name of the directory.
  * This will create: erc20/ERC20.h and erc20/ERC20_main.c
  *
- * abstract contract can contain functios without implementation. 
+ * abstract contract can contain functions without implementation. 
  *
  * generated c only cares about storage and function declarations as they appear here.
  */
@@ -85,7 +85,7 @@ abstract contract ERC20 {
     /**
      * PART II - functions
      *
-     * Only need to define public/external fuctions for the ABI (no difference for our use).
+     * Only need to define public/external functions for the ABI (no difference for our use).
      * Define all functions virtual to avoid requiring a solidity implementation.
      *
      * The generated h file will contain declarations for all functions declared here and selectors
