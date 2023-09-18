@@ -1,5 +1,5 @@
 
-STACK_SIZE=1024
+STACK_SIZE=8192
 CC=clang
 LD=wasm-ld
 CFLAGS=-I../../include/ -Iinterface-gen/ --target=wasm32 -Os --no-standard-libraries -mbulk-memory -Wall -g
