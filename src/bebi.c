@@ -6,7 +6,7 @@ extern inline int bebi_sub(bebi lhs, size_t lhs_size, const bebi rhs, size_t rhs
 extern inline int bebi_cmp(const bebi lhs, size_t lhs_size, const bebi rhs, size_t rhs_size);
 
 extern inline void bebi_set_u8(bebi dst, size_t offset, uint8_t val);
-extern inline bool bebi_is_0(const bebi bebi, size_t size);
+extern inline bool bebi_is_zero(const bebi bebi, size_t size);
 extern inline uint8_t bebi_get_u8(const bebi src, size_t offset);
 extern inline void bebi_set_u16(bebi dst, size_t offset, uint16_t val);
 extern inline uint16_t bebi_get_u16(const bebi src, size_t offset);
@@ -50,23 +50,23 @@ void bebi32_set_u64(bebi32 dst, uint64_t val) {
 }
 
 bool bebi32_is_u8(const bebi32 dst) {
-    return bebi_is_0(dst, 32-8);
+    return bebi_is_zero(dst, 32-8);
 }
 
 bool bebi32_is_u16(const bebi32 dst) {
-    return bebi_is_0(dst, 32-2);
+    return bebi_is_zero(dst, 32-2);
 }
 
 bool bebi32_is_u32(const bebi32 dst) {
-    return bebi_is_0(dst, 32-4);
+    return bebi_is_zero(dst, 32-4);
 }
 
 bool bebi32_is_u64(const bebi32 dst) {
-    return bebi_is_0(dst, 32-8);
+    return bebi_is_zero(dst, 32-8);
 }
 
 bool bebi32_is_u160(const bebi32 dst) {
-    return bebi_is_0(dst, 32-20);
+    return bebi_is_zero(dst, 32-20);
 }
 
 uint16_t bebi32_get_u16(const bebi32 dst) {
@@ -81,8 +81,8 @@ uint64_t bebi32_get_u64(const bebi32 dst) {
     return bebi_get_u64(dst, 32-8);
 }
 
-bool bebi32_is_0(const bebi bebi) {
-    return bebi_is_0(bebi, 32);
+bool bebi32_is_zero(const bebi bebi) {
+    return bebi_is_zero(bebi, 32);
 }
 
 int bebi32_cmp(const bebi32 lhs, const bebi32 rhs) {

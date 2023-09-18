@@ -5,7 +5,7 @@
 /**
  * BEBI stands for Big Endian Big Int
  *
- * It is meant to be used in a small-endian environment, specifically WASI-32
+ * It is meant to be used in a small-endian environment, specifically WASM-32
  *
  * It is a library mostly meant to support encoding/decoding of big-endian big-int values
  * Only addition/subtraction and comparisons are supported for math (which is enough for quite a lot)
@@ -71,7 +71,7 @@ inline int bebi_sub(bebi lhs, size_t lhs_size, const bebi rhs, size_t rhs_size);
  */
 inline int bebi_cmp(const bebi lhs, size_t lhs_size, const bebi rhs, size_t rhs_size);
 
-inline bool bebi_is_0(const bebi bebi, size_t size);
+inline bool bebi_is_zero(const bebi bebi, size_t size);
 
 /**
  * bebi32 is a specialized bebi of size 32, which is used a lot in solidity
@@ -111,7 +111,7 @@ int bebi32_sub(bebi32 lhs, const bebi32 rhs);
 int bebi32_add_u64(bebi32 lhs, uint64_t rhs);
 
 int bebi32_cmp(const bebi32 lhs, const bebi32 rhs);
-bool bebi32_is_0(const bebi bebi);
+bool bebi32_is_zero(const bebi bebi);
 
 
 /******* implementation of previously-declated functions *********/
@@ -193,7 +193,7 @@ inline void bebi_set_u8(bebi dst, size_t offset, uint8_t val) {
     dst[offset] = val;
 }
 
-inline bool bebi_is_0(const bebi bebi, size_t size) {
+inline bool bebi_is_zero(const bebi bebi, size_t size) {
     size_t idx = 0;
     while (idx < size) {
         if (bebi[idx] != 0) {

@@ -231,7 +231,7 @@ void push_minter(void *storage, bebi32 minter) {
     uint64_t index = bebi32_get_u64(array_size);
 
     // address 0 is never marked "minter"
-    if (!bebi32_is_0(minter)) {
+    if (!bebi32_is_zero(minter)) {
         // compute memory slot for the index
         bebi32 idx_slot;
         minter_idx_storage_slot(minter, idx_slot);
