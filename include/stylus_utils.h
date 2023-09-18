@@ -36,8 +36,8 @@ ArbResult inline _return_nodata(ArbStatus status) {
 /**
  * string must be short (up to 32 bytes)
  * 
- * Success returns the string in a touple, as returned by functions returning string
- * Failure returns an Error string in a touple, which can encode a revert reason for any function
+ * Success returns the string in a tuple, as returned by functions returning string
+ * Failure returns an Error string in a tuple, which can encode a revert reason for any function
  */
 ArbResult _return_short_string(ArbStatus status, char *string);
 

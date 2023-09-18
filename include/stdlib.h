@@ -2,7 +2,7 @@
 #define __SIMPLELIB_STDLIB_H
 
 /**
- * Not at all a full implementation of string.h,
+ * Not at all a full implementation of stdlib.h,
  * just the parts of it supported by simplelib
  * 
  * requirements: -
