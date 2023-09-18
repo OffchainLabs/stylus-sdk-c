@@ -12,7 +12,6 @@ extern "C" {
 #endif
 
 #define VM_HOOK(name) extern __attribute__((import_module("vm_hooks"), import_name(#name)))
-#define CONSOLE(name) extern __attribute__((import_module("console"),  import_name(#name)))
 
 /**
  * Gets the ETH balance in wei of the account at the given address.
@@ -362,35 +361,6 @@ VM_HOOK(tx_ink_price) uint64_t tx_ink_price();
  * [`ORIGIN`]: https://www.evm.codes/#32
  */
 VM_HOOK(tx_origin) void tx_origin(uint8_t * origin);
-
-/**
- * Prints a 32-bit floating point number to the console, Only available in debug mode with
- * floating point enabled.
- */
-CONSOLE(log_f32) void log_f32(float * value);
-
-/**
- * Prints a 64-bit floating point number to the console, Only available in debug mode with
- * floating point enabled.
- */
-CONSOLE(log_f64) void log_f64(double * value);
-
-/**
- * Prints a 32-bit integer to the console, which can be either signed or unsigned.
- * Only available in debug mode.
- */
-CONSOLE(log_i32) void log_i32(int32_t * value);
-
-/**
- * Prints a 64-bit integer to the console, which can be either signed or unsigned.
- * Only available in debug mode.
- */
-CONSOLE(log_i64) void log_i64(int64_t * value);
-
-/**
- * Prints a UTF-8 encoded string to the console. Only available in debug mode.
- */
-CONSOLE(log_txt) void log_txt(const uint8_t * text, size_t len);
 
 #ifdef __cplusplus
 }

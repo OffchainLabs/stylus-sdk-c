@@ -1,28 +1,26 @@
 // Copyright 2022-2023, Offchain Labs, Inc.
 // For licensing, see https://github.com/stylus-sdk-c/blob/stylus/licenses/COPYRIGHT.md
 
-#ifndef STYLUS_STYLUS_H
-#define STYLUS_STYLUS_H
+#ifndef __STYLUS_ENTRY_H
+#define __STYLUS_ENTRY_H
+
+/**
+ * This defines the entrypoint to a smart contract.
+ * Only one file per wasm is expected to have an entrypoint
+ *
+ * requires: stylus_types.h
+ * c-file: -
+ */
 
 #include <stddef.h>
 #include <stdint.h>
 
 #include "hostio.h"
+#include "stylus_types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef enum ArbStatus {
-    Success = 0,
-    Failure,
-} ArbStatus;
-
-typedef struct ArbResult {
-    const ArbStatus status;
-    const uint8_t * output;
-    const size_t output_len;
-} ArbResult;
 
 #define ENTRYPOINT(user_main)                                           \
     /* Force the compiler to import these symbols                    */ \
@@ -45,4 +43,4 @@ typedef struct ArbResult {
 }
 #endif
 
-#endif
+#endif // __STYLUS_ENTRY_H
