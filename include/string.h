@@ -16,8 +16,17 @@
 extern "C" {
 #endif
 
-void *memcpy(void *destination, const void *source, size_t num);
-void *memset(void *ptr, int value, size_t num );
+inline void *memcpy(void *destination, const void *source, size_t num) {
+    return __builtin_memcpy(destination, source, num);
+}
+
+inline void *memmove( void *destination, const void * source, size_t num) {
+    return __builtin_memcpy(destination, source, num);
+}
+
+inline void *memset(void *ptr, int value, size_t num) {
+    return __builtin_memset(ptr, value, num);
+}
 
 char *strncpy(char *dst, const char *src, size_t num);
 size_t strlen(const char *str);
