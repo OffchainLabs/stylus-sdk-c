@@ -26,7 +26,7 @@
  * Unsurprisingly, solidity is very good at solidity-compatibility.
  * C requires low level understanding and implementation of things
  * that are ready out-of-the box in solidity.
- * On the ohter hand, C with rust allows you to do a level of process
+ * On the other hand, C with stylus allows you to do a level of process
  * power that is just not available to solidity smart contracts.
  *
  * 2) A C-SDK smart contract should conform to solidity for it's public
