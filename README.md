@@ -37,7 +37,7 @@ We suggest using these tools:
 | [`hostio.h`](include/hostio.h) | Functions supplied by the stylus environment to change and access the VM state (see Host I/O) |
 | [`stylus_debug.h`](include/stylus_debug.h) | Host-ios that can oonly be used by a debug-enabled node. Best way to get a debug enabled node is to [run it locally](https://docs.arbitrum.io/stylus/how-tos/local-stylus-dev-node) |
 | [`bebi.h`](include/bebi.h) | Tools for handling Big Endian Big Integers in wasm-32 |
-| [`storage.h`](include/storage.h) | Provides a minimal entrypoint |
+| [`storage.h`](include/storage.h) | Provides utils to access contract storage |
 | [`stylus_utils.h`](include/stylus_utils.h) | Higher-level utils that might help smart contract developers |
 | [`string.h`](include/string.h) | Minimal and partial implementation of the standard interface |
 | [`stdlib.h`](include/stdlib.h) | Minimal and partial implementation of the standard interface |
