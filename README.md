@@ -83,14 +83,17 @@ The table below includes `clang` flags commonly used to build Stylus contracts. 
 | --no-standard-libraries | opt out of the stdandard library                              | ✅       |
 | -mbulk-memory           | enable bulk-memory operations (accelerates memset and memcpy) | ✅       |
 | -O2 / -O3 / -Oz         | optimize for speed or size                                    | ✅       |
+
+### Wasm-ld flags
+
+Flags that should be used when linking a wasm file with wasm-ld.
+
+| Flag                    | Info                                                          | Optional |
+|:------------------------|---------------------------------------------------------------|:---------|
 | --no-entry              | let Stylus decide the entrypoint                              |          |
 | --stack-first           | puts the shadow-stack at the beginning of the memory          | ✅       |
 | -z stack-size=...       | sets size for the shadow-stack                                | ✅       |
 
-The easiest way to deploy your C or C++ program is to use the [Cargo Stylus CLI tool][cargo], which has a `--wasm-file-path` flag that accepts arbitrary WASMs.
-```sh
-cargo stylus deploy --wasm-file-path <wasm> --endpoint <rpc> --private-key-path <secret>
-```
 
 ### Performance
 C binaries are both small and very efficient. The [`siphash`][siphash] example is only **609 bytes** onchain and costs **22 gas** to execute a 32-byte input. By contrast, 22 gas only buys 7 ADD instructions in Solidity.
