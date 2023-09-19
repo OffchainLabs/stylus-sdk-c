@@ -12,42 +12,51 @@
   </p>
 </p>
 
-## Getting Started
-The C/C++ SDK consists of two headers, only the first of which is necessary to write Stylus contracts.
+## General
 
-| Header                 | Info                          |
-|:-----------------------|:------------------------------|
-| [`stylus.h`](stylus.h) | Provides a minimal entrypoint |
-| [`hostio.h`](hostio.h) | Additional EVM affordances    |
+The C/C++ SDK allows you to take full controll of the underline web-assembly executed in your smart contract.
+
+## Required Tools
 
 The Stylus VM executes WebAssembly, so you'll need a C/C++ compiler with support for wasm32 targets. Support for this varies, so some users may have to build `clang` or `gcc` from source. Your package manager may also include a compatible version.
 
-The table below includes `clang` flags commonly used to build Stylus contracts. The [siphash][siphash] example uses most of the following, and is a great starting point for programs that opt out of the standard library.
+We suggest using these tools:
 
-| Flag                    | Info                                                          | Optional |
-|:------------------------|---------------------------------------------------------------|:---------|
-| --target=wasm32         | compile to wasm                                               |          |
-| --no-standard-libraries | opt out of the stdandard library                              | ✅       |
-| -mbulk-memory           | enable bulk-memory operations (accelerates memset and memcpy) | ✅       |
-| -Wl,--no-entry          | let Stylus decide the entrypoint                              |          |
-| -O3                     | optimize for speed                                            | ✅       |
-| -Oz                     | optimize for binary size                                      | ✅       |
+* [`llvm`](https://releases.llvm.org/) Must include clang and have webassembly support enabled with bulk-memory option. Make sure that clang accepts --target=wasm32 and that llvm ships with wasm-ld binary. Availability varies between distributions, but many package managers have these in a reasonable configuration, defined as "llvm" and/or "clang" packages.
+* [`cargo-stylus`](https://github.com/OffchainLabs/cargo-stylus) is used to generate c-code, cgeck and deploy contracts. We do not require rust support for wasm platforms.
+* make, git
 
-The easiest way to deploy your C or C++ program is to use the [Cargo Stylus CLI tool][cargo], which has a `--wasm-file-path` flag that accepts arbitrary WASMs.
-```sh
-cargo stylus deploy --wasm-file-path <wasm> --endpoint <rpc> --private-key-path <secret>
-```
+## C/C++ SDK library
 
-[cargo]: https://github.com/OffchainLabs/cargo-stylus
+`The SDK is not audited, and not stable. API of future versions might be incompatible with the one declared here.`
 
-## Performance
-C binaries are both small and very efficient. The [`siphash`][siphash] example is only **609 bytes** onchain and costs **22 gas** to execute a 32-byte input. By contrast, 22 gas only buys 7 ADD instructions in Solidity.
+| Header                 | Info                          |
+|:-----------------------|:------------------------------|
+| [`stylus_types.h`](include/stylus_types.h) | Types used by the wasm entrypoint to define return values from stylus |
+| [`stylus_entry.h`](include/stylus_entry.h) | Includes only used by the entry-point to a stylus smart contract |
+| [`hostio.h`](include/hostio.h) | Functions supplied by the stylus environment to change and access the VM state (see Host I/O) |
+| [`stylus_debug.h`](include/stylus_debug.h) | Host-ios that can oonly be used by a debug-enabled node. Best way to get a debug enabled node is to [run it locally](https://docs.arbitrum.io/stylus/how-tos/local-stylus-dev-node) |
+| [`bebi.h`](include/bebi.h) | Tools for handling Big Endian Big Integers in wasm-32 |
+| [`storage.h`](include/storage.h) | Provides a minimal entrypoint |
+| [`stylus_utils.h`](include/stylus_utils.h) | Higher-level utils that might help smart contract developers |
+| [`string.h`](include/string.h) | Minimal and partial implementation of the standard interface |
+| [`stdlib.h`](include/stdlib.h) | Minimal and partial implementation of the standard interface |
 
-How did we achieve this efficiency? All we had to do was Google for an example siphash program and add a simple entrypoint. In the Stylus model, you can deploy highly-optimized and thouroughly-audited, industry-standard reference implementations as-is. With the Stylus SDK, cryptography, algorithms, and other high-compute applications are both straightforward and economically viable.
+## Examples
+
+The library includes two examples. Each example contais a makefile that can build the wasm from source using the command "make". The examples are annotated, and users are encouraged to read through the code.
+
+### siphash
+
+Shows example for a "precompile-like" compute only smart contract that processes input bytes and returns their hash. This examples uses very little of the sdk library.
+
+### erc20
+
+Shows example for an erc20-like smart contract. This examples uses the library as well as c-code generation capabilities of cargo-stylus.
 
 ## Host I/Os
 
-Though this C/C++ library is oriented toward pure-compute use cases, it is possible to write stateful smart contracts that behave like Solidity and Rust ones by importing [`hostios.h`](hostios.h). There you can call VM hooks directly, which allows you to do everything from looking up the current block number to calling other contracts.
+[`include/hostios.h`](hostios.h). There you can call VM hooks directly, which allows you to do everything from looking up the current block number to calling other contracts.
 
 For example, the VM provides an efficient implementation of [keccak256][keccak256] via
 ```c
@@ -61,6 +70,32 @@ For a comprehensive list of hostios, please see [The Host I/O Reference][hostios
 [hostios]: TODO
 [keccak256]: https://en.wikipedia.org/wiki/SHA-3
 [siphash]: examples/siphash/main.c
+
+## Notes about using C to build wasm32
+
+### Clang flags
+
+The table below includes `clang` flags commonly used to build Stylus contracts. The [siphash][siphash] example uses most of the following, and is a great starting point for programs that opt out of the standard library.
+
+| Flag                    | Info                                                          | Optional |
+|:------------------------|---------------------------------------------------------------|:---------|
+| --target=wasm32         | compile to wasm                                               |          |
+| --no-standard-libraries | opt out of the stdandard library                              | ✅       |
+| -mbulk-memory           | enable bulk-memory operations (accelerates memset and memcpy) | ✅       |
+| -O2 / -O3 / -Oz         | optimize for speed or size                                    | ✅       |
+| --no-entry              | let Stylus decide the entrypoint                              |          |
+| --stack-first           | puts the shadow-stack at the beginning of the memory          | ✅       |
+| -z stack-size=...       | sets size for the shadow-stack                                | ✅       |
+
+The easiest way to deploy your C or C++ program is to use the [Cargo Stylus CLI tool][cargo], which has a `--wasm-file-path` flag that accepts arbitrary WASMs.
+```sh
+cargo stylus deploy --wasm-file-path <wasm> --endpoint <rpc> --private-key-path <secret>
+```
+
+### Performance
+C binaries are both small and very efficient. The [`siphash`][siphash] example is only **609 bytes** onchain and costs **22 gas** to execute a 32-byte input. By contrast, 22 gas only buys 7 ADD instructions in Solidity.
+
+How did we achieve this efficiency? All we had to do was Google for an example siphash program and add a simple entrypoint. In the Stylus model, you can deploy highly-optimized and thouroughly-audited, industry-standard reference implementations as-is. With the Stylus SDK, cryptography, algorithms, and other high-compute applications are both straightforward and economically viable.
 
 ## Roadmap
 
