@@ -9,14 +9,23 @@ OBJECTS=main.o siphash.o
 
 all: ./siphash.wasm
 
+# Step 1: build c-files
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Step 2: link
 siphash_unstripped.wasm: $(OBJECTS)
 	$(LD) $(LDFLAGS) $(OBJECTS) -o $@
 
+# Step 3: strip symbols from wasm
 siphash.wasm: siphash_unstripped.wasm
 	wasm-strip -o $@ $<
+
+# Step 4: check the wasm using cargo-stylus
+# cargo stylus check --wasm-file-path ./siphash.wasm  --endpoint $ENDPOINT --private-key=$PRIVATE_KEY
+
+# Step 5: deploy the wasm using cargo-stylus
+# cargo stylus check --wasm-file-path ./siphash.wasm  --endpoint $ENDPOINT --private-key=$PRIVATE_KEY
 
 clean:
 	rm $(OBJECTS) siphash_unstripped.wasm siphash.wasm

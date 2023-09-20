@@ -46,7 +46,11 @@ build/erc20.wasm: $(OBJECTS)
 erc20.wasm: build/erc20.wasm
 	wasm-strip -o $@ $<
 
-# Steps 6 & 7: check and deploy the wasm using cargo-stylus
+# Step 6: check the wasm using cargo-stylus
+# cargo stylus check --wasm-file-path ./erc20.wasm  --endpoint $ENDPOINT --private-key=$PRIVATE_KEY
+
+# Step 7: deploy the wasm using cargo-stylus
+# cargo stylus check --wasm-file-path ./erc20.wasm  --endpoint $ENDPOINT --private-key=$PRIVATE_KEY
 
 clean:
 	rm -rf interface-gen build erc20.wasm
