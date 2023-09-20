@@ -7,14 +7,14 @@
   <h3 align="center">The Stylus SDK</h3>
 
   <p align="center">
-    <a href="https://developer.arbitrum.io/"><strong>C/C++ contracts on Arbitrum »</strong></a>
+    <a href="https://docs.arbitrum.io/stylus/stylus-gentle-introduction"><strong>C/C++ contracts on Arbitrum »</strong></a>
     <br />
   </p>
 </p>
 
 ## General
 
-The C/C++ SDK allows you to take full controll of the underline web-assembly executed in your smart contract.
+The C/C++ SDK allows you to take full control of the underlying web-assembly executed in your smart contract.
 
 ## Required Tools
 
@@ -22,37 +22,39 @@ The Stylus VM executes WebAssembly, so you'll need a C/C++ compiler with support
 
 We suggest using these tools:
 
-* [`llvm`](https://releases.llvm.org/) Must include clang and have webassembly support enabled with bulk-memory option. Make sure that clang accepts --target=wasm32 and that llvm ships with wasm-ld binary. Availability varies between distributions, but many package managers have these in a reasonable configuration, defined as "llvm" and/or "clang" packages.
-* [`cargo-stylus`](https://github.com/OffchainLabs/cargo-stylus) is used to generate c-code, cgeck and deploy contracts. We do not require rust support for wasm platforms.
-* make, git
+* [`llvm`](https://releases.llvm.org/) must include clang and have WebAssembly support, including the common `bulk-memory` extension. Make sure that clang accepts `--target=wasm32` and that llvm ships with the `wasm-ld` binary. Availability varies between distributions, but package managers commonly include these preconfigured in their "llvm" and/or "clang" recipies.
+* [`cargo-stylus`](https://github.com/OffchainLabs/cargo-stylus) is used to generate c-code, and to check and deploy contracts. Rust support is not required.
+* `make`, `git`
 
 ## C/C++ SDK library
 
-`The SDK is not audited, and not stable. API of future versions might be incompatible with the one declared here.`
+This SDK is neither audited, nor stable. Future versions may ship with backward incompatible changes.
 
-| Header                 | Info                          |
-|:-----------------------|:------------------------------|
-| [`stylus_types.h`](include/stylus_types.h) | Types used by the wasm entrypoint to define return values from stylus |
-| [`stylus_entry.h`](include/stylus_entry.h) | Includes only used by the entry-point to a stylus smart contract |
-| [`hostio.h`](include/hostio.h) | Functions supplied by the stylus environment to change and access the VM state (see Host I/O) |
-| [`stylus_debug.h`](include/stylus_debug.h) | Host-ios that can oonly be used by a debug-enabled node. Best way to get a debug enabled node is to [run it locally](https://docs.arbitrum.io/stylus/how-tos/local-stylus-dev-node) |
-| [`bebi.h`](include/bebi.h) | Tools for handling Big Endian Big Integers in wasm-32 |
-| [`storage.h`](include/storage.h) | Provides utils to access contract storage |
-| [`stylus_utils.h`](include/stylus_utils.h) | Higher-level utils that might help smart contract developers |
-| [`string.h`](include/string.h) | Minimal and partial implementation of the standard interface |
-| [`stdlib.h`](include/stdlib.h) | Minimal and partial implementation of the standard interface |
+| Header                                     | Info                                                                                                           |
+|:-------------------------------------------|:---------------------------------------------------------------------------------------------------------------|
+| [`stylus_types.h`](include/stylus_types.h) | Types used by the wasm entrypoint to define return values from stylus                                          |
+| [`stylus_entry.h`](include/stylus_entry.h) | Includes used to generate stylus entrypoints                                                                   |
+| [`hostio.h`](include/hostio.h)             | Functions supplied by the stylus environment to change and access the VM state (see Host I/O)                  |
+| [`stylus_debug.h`](include/stylus_debug.h) | Host I/Os only available in debug mode. The best way to get a debug-enabled node is to [run one locally][node] |
+| [`bebi.h`](include/bebi.h)                 | Tools for handling Big-Endian Big Integers in wasm-32                                                          |
+| [`storage.h`](include/storage.h)           | Contract storage utilities                                                                                     |
+| [`stylus_utils.h`](include/stylus_utils.h) | Higher-level utils that might help smart contract developers                                                   |
+| [`string.h`](include/string.h)             | Minimal (and incomplete) implementation of the standard `string.h`                                             |
+| [`stdlib.h`](include/stdlib.h)             | Minimal (and incomplete) implementation of the standard `stdlib.h`                                             |
+
+[node]: https://docs.arbitrum.io/stylus/how-tos/local-stylus-dev-node
 
 ## Examples
 
-The library includes two examples. Each example contais a makefile that can build the wasm from source using the command "make". The examples are annotated, and users are encouraged to read through the code.
+The library includes two examples, each with a makefile that builds a wasm from source using the command `make`. Both are annotated, and users are encouraged to read through the code.
 
 ### siphash
 
-Shows example for a "precompile-like" compute only smart contract that processes input bytes and returns their hash. This examples uses very little of the sdk library.
+Demonstrates a custom precompile, compute-only smart contract that processes input bytes and returns their hash. This minimal example uses very little of the SDK library.
 
 ### erc20
 
-Shows example for an erc20-like smart contract. This examples uses the library as well as c-code generation capabilities of cargo-stylus.
+Provides an erc20-like smart contract implementation. This example uses the library as well as the c-code generation capabilities of cargo-stylus.
 
 ## Host I/Os
 
