@@ -249,7 +249,7 @@ VM_HOOK(evm_ink_left) uint64_t evm_ink_left();
  * Internally the Stylus VM forces calls to this hostio whenever new WASM pages are allocated.
  * Calls made voluntarily will unproductively consume gas.
  */
-VM_HOOK(memory_grow) void memory_grow(const uint16_t pages);
+VM_HOOK(pay_for_memory_grow) void pay_for_memory_grow(const uint16_t pages);
 
 /** 
  * Gets the address of the account that called the program. For normal L2-to-L2 transactions
