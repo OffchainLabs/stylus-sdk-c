@@ -27,7 +27,7 @@ extern "C" {
     /* Note: calling these functions will unproductively consume gas */ \
     __attribute__((export_name("mark_used")))                           \
     void mark_used() {                                                  \
-        memory_grow(0);                                                 \
+        pay_for_memory_grow(0);                                         \
     }                                                                   \
                                                                         \
     __attribute__((export_name("user_entrypoint")))                     \
