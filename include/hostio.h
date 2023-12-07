@@ -36,7 +36,7 @@ VM_HOOK(account_codehash) void account_codehash(const uint8_t * address, uint8_t
  * that of the EVM. This means that, under the hood, this hostio is accessing the 32-byte
  * value stored in the EVM state trie at offset `key`, which will be `0` when not previously
  * set. The semantics, then, are equivalent to that of the EVM's [`SLOAD`] opcode.
- * 
+ *
  * [`SLOAD`]: https://www.evm.codes/#54
  */
 VM_HOOK(storage_load_bytes32) void storage_load_bytes32(const uint8_t * key, uint8_t * dest);
@@ -46,10 +46,30 @@ VM_HOOK(storage_load_bytes32) void storage_load_bytes32(const uint8_t * key, uin
  * of the EVM. This means that, under the hood, this hostio is storing a 32-byte value into
  * the EVM state trie at offset `key`. Furthermore, refunds are tabulated exactly as in the
  * EVM. The semantics, then, are equivalent to that of the EVM's [`SSTORE`] opcode.
- * 
+ *
  * [`SSTORE`]: https://www.evm.codes/#55
  */
 VM_HOOK(storage_store_bytes32) void storage_store_bytes32(const uint8_t * key, const uint8_t * value);
+
+/**
+ * Reads a 32-byte value from transient storage. Stylus's storage format is identical to
+ * that of the EVM. This means that, under the hood, this hostio is accessing the 32-byte
+ * value stored in the EVM transient storage at offset `key`, which will be `0` when not previously
+ * set. The semantics, then, are equivalent to that of the EVM's [`TLOAD`] opcode.
+ * 
+ * [`TLOAD`]: https://www.evm.codes/#5c
+ */
+VM_HOOK(storage_transient_load_bytes32) void storage_transient_load_bytes32(const uint8_t * key, uint8_t * dest);
+
+/**
+ * Stores a 32-byte value to permanent storage. Stylus's storage format is identical to that
+ * of the EVM. This means that, under the hood, this hostio is storing a 32-byte value into
+ * the EVM transient storage at offset `key`. Furthermore, refunds are tabulated exactly as in the
+ * EVM. The semantics, then, are equivalent to that of the EVM's [`TSTORE`] opcode.
+ * 
+ * [`TSTORE`]: https://www.evm.codes/#5d
+ */
+VM_HOOK(storage_transient_store_bytes32) void storage_transient_store_bytes32(const uint8_t * key, const uint8_t * value);
 
 /**
  * Gets the basefee of the current block. The semantics are equivalent to that of the EVM's

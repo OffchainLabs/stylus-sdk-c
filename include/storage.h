@@ -23,7 +23,7 @@ extern "C" {
 
 /**
  * storage_load / store load or store a value from storage accordingly.
- * 
+ *
  * The value of the first "storage" pointer is not used.
  * generated headers provide:
  *  a const storage pointer when working for a view-only function
@@ -40,6 +40,27 @@ inline void storage_load(const void* storage, const uint8_t *key, uint8_t *dest)
  */
 inline void storage_store(void *storage, const uint8_t *key, const uint8_t *value) {
     storage_store_bytes32(key, value);
+}
+
+/**
+ * storage_transient_load / store load or store a value from transient storage accordingly.
+ * 
+ * The value of the first "storage" pointer is not used.
+ * generated headers provide:
+ *  a const storage pointer when working for a view-only function
+ *  a non const pointer for a mutating function
+ *  no pointer (so don't call storage_transient_load) for a pure function
+ *
+ */
+inline void storage_transient_load(const void* storage, const uint8_t *key, uint8_t *dest) {
+    storage_transient_load_bytes32(key, dest);
+}
+
+/**
+ * see documentation for storage_transient_load
+ */
+inline void storage_transient_store(void *storage, const uint8_t *key, const uint8_t *value) {
+    storage_transient_store_bytes32(key, value);
 }
 
 /**
