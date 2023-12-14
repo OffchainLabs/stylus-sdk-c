@@ -57,7 +57,7 @@ VM_HOOK(storage_store_bytes32) void storage_store_bytes32(const uint8_t * key, c
  * value stored in the EVM transient storage at offset `key`, which will be `0` when not previously
  * set. The semantics, then, are equivalent to that of the EVM's [`TLOAD`] opcode.
  * 
- * [`TLOAD`]: https://www.evm.codes/#5c
+ * [`TLOAD`]: https://eips.ethereum.org/EIPS/eip-1153
  */
 VM_HOOK(transient_load_bytes32) void transient_load_bytes32(const uint8_t * key, uint8_t * dest);
 
@@ -67,7 +67,7 @@ VM_HOOK(transient_load_bytes32) void transient_load_bytes32(const uint8_t * key,
  * the EVM transient storage at offset `key`. Furthermore, refunds are tabulated exactly as in the
  * EVM. The semantics, then, are equivalent to that of the EVM's [`TSTORE`] opcode.
  * 
- * [`TSTORE`]: https://www.evm.codes/#5d
+ * [`TSTORE`]: https://eips.ethereum.org/EIPS/eip-1153
  */
 VM_HOOK(transient_store_bytes32) void transient_store_bytes32(const uint8_t * key, const uint8_t * value);
 

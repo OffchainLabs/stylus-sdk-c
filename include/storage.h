@@ -43,27 +43,6 @@ inline void storage_store(void *storage, const uint8_t *key, const uint8_t *valu
 }
 
 /**
- * transient_load / store load or store a value from transient storage accordingly.
- * 
- * The value of the first "storage" pointer is not used.
- * generated headers provide:
- *  a const storage pointer when working for a view-only function
- *  a non const pointer for a mutating function
- *  no pointer (so don't call transient_load) for a pure function
- *
- */
-inline void transient_load(const void* storage, const uint8_t *key, uint8_t *dest) {
-    transient_load_bytes32(key, dest);
-}
-
-/**
- * see documentation for transient_load
- */
-inline void transient_store(void *storage, const uint8_t *key, const uint8_t *value) {
-    transient_store_bytes32(key, value);
-}
-
-/**
  * calculate slot for a map with base slot "storage" to put "key"
  * If key requires padding it must be applied before calling this function
  */
