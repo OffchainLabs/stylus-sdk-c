@@ -23,7 +23,7 @@ extern "C" {
 
 /**
  * storage_load / store load or store a value from storage accordingly.
- * 
+ *
  * The value of the first "storage" pointer is not used.
  * generated headers provide:
  *  a const storage pointer when working for a view-only function
