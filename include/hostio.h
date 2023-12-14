@@ -59,7 +59,7 @@ VM_HOOK(storage_store_bytes32) void storage_store_bytes32(const uint8_t * key, c
  * 
  * [`TLOAD`]: https://www.evm.codes/#5c
  */
-VM_HOOK(storage_transient_load_bytes32) void storage_transient_load_bytes32(const uint8_t * key, uint8_t * dest);
+VM_HOOK(transient_load_bytes32) void transient_load_bytes32(const uint8_t * key, uint8_t * dest);
 
 /**
  * Stores a 32-byte value to permanent storage. Stylus's storage format is identical to that
@@ -69,7 +69,7 @@ VM_HOOK(storage_transient_load_bytes32) void storage_transient_load_bytes32(cons
  * 
  * [`TSTORE`]: https://www.evm.codes/#5d
  */
-VM_HOOK(storage_transient_store_bytes32) void storage_transient_store_bytes32(const uint8_t * key, const uint8_t * value);
+VM_HOOK(transient_store_bytes32) void transient_store_bytes32(const uint8_t * key, const uint8_t * value);
 
 /**
  * Gets the basefee of the current block. The semantics are equivalent to that of the EVM's
