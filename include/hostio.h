@@ -21,6 +21,8 @@ extern "C" {
  */
 VM_HOOK(account_balance) void account_balance(const uint8_t * address, uint8_t * dest);
 
+VM_HOOK(account_code) void account_code(const uint8_t * address, size_t offset, size_t size, uint8_t * code) -> size_t;
+
 /**
  * Gets the code hash of the account at the given address. The semantics are equivalent
  * to that of the EVM's [`EXT_CODEHASH`] opcode. Note that the code hash of an account without
@@ -30,6 +32,10 @@ VM_HOOK(account_balance) void account_balance(const uint8_t * address, uint8_t *
  * [`EXT_CODEHASH`]: https://www.evm.codes/#3F
  */
 VM_HOOK(account_codehash) void account_codehash(const uint8_t * address, uint8_t * dest);
+
+VM_HOOK(account_code_size) size_t account_code_size(const uint8_t * address);
+
+VM_HOOK(mul) void mul(const uint8_t * lhs, const uint8_t * rhs, uint8_t * dest);
 
 /**
  * Reads a 32-byte value from permanent storage. Stylus's storage format is identical to
