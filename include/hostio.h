@@ -309,8 +309,11 @@ VM_HOOK(native_keccak256) void native_keccak256(const uint8_t * bytes, size_t le
 VM_HOOK(read_args) void read_args(const uint8_t * data);
 
 /**
- * Copies the bytes of the last EVM call or deployment return result. Reverts if out of
- * bounds. The semantics are equivalent to that of the EVM's [`RETURN_DATA_COPY`] opcode.
+ * Copies the bytes of the last EVM call or deployment return result. Does not revert if out of
+ * bounds, but rather copies the overlapping portion. The semantics are otherwise equivalent
+ * to that of the EVM's [`RETURN_DATA_COPY`] opcode.
+ * 
+ * Returns the number of bytes written.
  * 
  * [`RETURN_DATA_COPY`]: https://www.evm.codes/#3e
  */
