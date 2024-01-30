@@ -21,7 +21,23 @@ extern "C" {
  */
 VM_HOOK(account_balance) void account_balance(const uint8_t * address, uint8_t * dest);
 
-VM_HOOK(account_code) void account_code(const uint8_t * address, size_t offset, size_t size, uint8_t * code) -> size_t;
+/**
+ * Gets a subset of the code from the account at the given address. The semantics are identical to that
+ * of the EVM's [`EXT_CODE_COPY`] opcode, aside from one small detail: the write to the buffer `dest` will
+ * stop after the last byte is written. This is unlike the EVM, which right pads with zeros in this scenario.
+ * The return value is the number of bytes written, which allows the caller to detect if this has occured.
+ * 
+ * [`EXT_CODE_COPY`]: https://www.evm.codes/#3C
+ */
+VM_HOOK(account_code) size_t account_code(const uint8_t * address, size_t offset, size_t size, uint8_t * code);
+
+/**
+ * Gets the size of the code in bytes at the given address. The semantics are equivalent
+ * to that of the EVM's [`EXT_CODESIZE`].
+ * 
+ * [`EXT_CODESIZE`]: https://www.evm.codes/#3B
+ */
+VM_HOOK(account_code_size) size_t account_code_size(const uint8_t * address);
 
 /**
  * Gets the code hash of the account at the given address. The semantics are equivalent
@@ -32,10 +48,6 @@ VM_HOOK(account_code) void account_code(const uint8_t * address, size_t offset, 
  * [`EXT_CODEHASH`]: https://www.evm.codes/#3F
  */
 VM_HOOK(account_codehash) void account_codehash(const uint8_t * address, uint8_t * dest);
-
-VM_HOOK(account_code_size) size_t account_code_size(const uint8_t * address);
-
-VM_HOOK(mul) void mul(const uint8_t * lhs, const uint8_t * rhs, uint8_t * dest);
 
 /**
  * Reads a 32-byte value from permanent storage. Stylus's storage format is identical to
