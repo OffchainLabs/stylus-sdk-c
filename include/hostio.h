@@ -49,6 +49,16 @@ VM_HOOK(account_code_size) size_t account_code_size(const uint8_t * address);
  */
 VM_HOOK(account_codehash) void account_codehash(const uint8_t * address, uint8_t * dest);
 
+VM_HOOK(div) void div(const uint8_t * lhs, const uint8_t * rhs, uint8_t * result);
+VM_HOOK(sdiv) void sdiv(const uint8_t * lhs, const uint8_t * rhs, uint8_t * result);
+VM_HOOK(mod_) void mod_(const uint8_t * lhs, const uint8_t * rhs, uint8_t * result);
+VM_HOOK(smod) void smod(const uint8_t * lhs, const uint8_t * rhs, uint8_t * result);
+VM_HOOK(exp) void exp(const uint8_t * lhs, const uint8_t * rhs, uint8_t * result);
+VM_HOOK(addmod) void addmod(const uint8_t * lhs, const uint8_t * rhs, uint8_t * result);
+VM_HOOK(mulmod) void mulmod(const uint8_t * lhs, const uint8_t * rhs, uint8_t * result);
+VM_HOOK(expmod) void expmod(const uint8_t * lhs, const uint8_t * rhs, uint8_t * result);
+VM_HOOK(sign_extend) void sign_extend(uint32_t b, const uint8_t * val, uint8_t * result);
+
 /**
  * Reads a 32-byte value from permanent storage. Stylus's storage format is identical to
  * that of the EVM. This means that, under the hood, this hostio is accessing the 32-byte
