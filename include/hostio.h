@@ -327,6 +327,18 @@ VM_HOOK(read_return_data) size_t read_return_data(uint8_t * dest, size_t offset,
 VM_HOOK(write_result) void write_result(const uint8_t * data, size_t len);
 
 /**
+* Exits program execution early with the given status code.
+* If `0`, the program returns successfully with any data supplied by `write_result`.
+* Otherwise, the program reverts and treats any `write_result` data as revert data.
+* 
+* The semantics are equivalent to that of the EVM's [`Return`] and [`Revert`] opcodes.
+*
+* [`Return`]: https://www.evm.codes/#f3
+* [`Revert`]: https://www.evm.codes/#fd
+*/
+VM_HOOK(exit_early) void exit_early(uint32_t status);
+
+/**
  * Returns the length of the last EVM call or deployment return result, or `0` if neither have
  * happened during the program's execution. The semantics are equivalent to that of the EVM's
  * [`RETURN_DATA_SIZE`] opcode.
