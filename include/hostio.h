@@ -67,7 +67,7 @@ VM_HOOK(storage_load_bytes32) void storage_load_bytes32(const uint8_t * key, uin
  * 
  * [`SSTORE`]: https://www.evm.codes/#55
  */
-VM_HOOK(storage_store_bytes32) void storage_store_bytes32(const uint8_t * key, const uint8_t * value);
+VM_HOOK(storage_cache_bytes32) void storage_cache_bytes32(const uint8_t * key, const uint8_t * value);
 
 /**
  * Gets the basefee of the current block. The semantics are equivalent to that of the EVM's
