@@ -42,14 +42,24 @@ VM_HOOK(account_codehash) void account_codehash(const uint8_t * address, uint8_t
 VM_HOOK(storage_load_bytes32) void storage_load_bytes32(const uint8_t * key, uint8_t * dest);
 
 /**
- * Stores a 32-byte value to permanent storage. Stylus's storage format is identical to that
+ * Stores a 32-byte value to storage cache. Stylus's storage format is identical to that
  * of the EVM. This means that, under the hood, this hostio is storing a 32-byte value into
  * the EVM state trie at offset `key`. Furthermore, refunds are tabulated exactly as in the
  * EVM. The semantics, then, are equivalent to that of the EVM's [`SSTORE`] opcode.
  * 
+ * Note: because this value is cached, one must call `storage_flush_cache` to persist the value.
+ * 
  * [`SSTORE`]: https://www.evm.codes/#55
  */
-VM_HOOK(storage_store_bytes32) void storage_store_bytes32(const uint8_t * key, const uint8_t * value);
+VM_HOOK(storage_cache_bytes32) void storage_cache_bytes32(const uint8_t * key, const uint8_t * value);
+
+/**
+ * Persists any dirty values in the storage cache to the EVM state trie, dropping the cache entirely if requested.
+ *  Analogous to repeated invocations of [`SSTORE`].
+ * 
+ * [`SSTORE`]: https://www.evm.codes/#55
+ */
+VM_HOOK(storage_flush_cache) void storage_flush_cache(uint32_t clear);
 
 /**
  * Gets the basefee of the current block. The semantics are equivalent to that of the EVM's
@@ -249,7 +259,7 @@ VM_HOOK(evm_ink_left) uint64_t evm_ink_left();
  * Internally the Stylus VM forces calls to this hostio whenever new WASM pages are allocated.
  * Calls made voluntarily will unproductively consume gas.
  */
-VM_HOOK(memory_grow) void memory_grow(const uint16_t pages);
+VM_HOOK(pay_for_memory_grow) void pay_for_memory_grow(const uint16_t pages);
 
 /** 
  * Gets the address of the account that called the program. For normal L2-to-L2 transactions
