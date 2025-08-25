@@ -60,7 +60,7 @@ erc20.wasm: build/erc20.wasm
 # cargo stylus deploy --wasm-file ./erc20.wasm  --endpoint $ENDPOINT --private-key=$PRIVATE_KEY --no-verify
 # step 7: use the contract - after setting CONTRACT_ADDR
 #
-# cast call $CONTRACT_ADDR --rpc-url $DEV_ENDPOINT  "symbol()" | xargs cast to-ascii
+# cast call $CONTRACT_ADDR --rpc-url $ENDPOINT  "symbol()(string)"
 # cast send --rpc-url $ENDPOINT  --private-key $PRIVATE_KEY  $CONTRACT_ADDR  "init(address)" $MY_ADDRESS
 # cast call --rpc-url $ENDPOINT  $CONTRACT_ADDR  "balanceOf(address)" $MY_ADDRESS
 # cast send --rpc-url $ENDPOINT  --private-key $PRIVATE_KEY  $CONTRACT_ADDR  "mint(address,uint256)" $MY_ADDRESS 1024
