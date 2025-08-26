@@ -39,7 +39,7 @@ inline void storage_load(const void* storage, const uint8_t *key, uint8_t *dest)
  * see documentation for storage_load
  */
 inline void storage_store(void *storage, const uint8_t *key, const uint8_t *value) {
-    storage_store_bytes32(key, value);
+    storage_cache_bytes32(key, value);
 }
 
 /**

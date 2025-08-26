@@ -19,7 +19,7 @@ build/interface.json: interface_compile.json erc20.sol
 # STEP 2 : generate headers and main function from the compiled solidity
 cargo-generate: build/interface.json
 	mkdir -p build
-	cargo-stylus c-gen $< interface-gen
+	cargo stylus cgen $< interface-gen
 
 interface-gen/erc20/ERC20_main.c: cargo-generate
 
@@ -46,11 +46,24 @@ build/erc20.wasm: $(OBJECTS)
 erc20.wasm: build/erc20.wasm
 	wasm-strip -o $@ $<
 
-# Step 6: check the wasm using cargo-stylus
-# cargo stylus check --wasm-file-path ./erc20.wasm  --endpoint $ENDPOINT --private-key=$PRIVATE_KEY
+# The next exports are development with for dev-node (https://docs.arbitrum.io/run-arbitrum-node/run-nitro-dev-node)
+#      export ENDPOINT=http://127.0.0.1:8547
+#      export PRIVATE_KEY=0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659
+#      export MY_ADDRESS=0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E
 
-# Step 7: deploy the wasm using cargo-stylus
-# cargo stylus check --wasm-file-path ./erc20.wasm  --endpoint $ENDPOINT --private-key=$PRIVATE_KEY
+# Step 5: check the wasm using cargo-stylus
+#
+# cargo stylus check --wasm-file ./erc20.wasm  --endpoint $ENDPOINT
+
+# Step 6: deploy the wasm using cargo-stylus
+#
+# cargo stylus deploy --wasm-file ./erc20.wasm  --endpoint $ENDPOINT --private-key=$PRIVATE_KEY --no-verify
+# step 7: use the contract - after setting CONTRACT_ADDR
+#
+# cast call $CONTRACT_ADDR --rpc-url $ENDPOINT  "symbol()(string)"
+# cast send --rpc-url $ENDPOINT  --private-key $PRIVATE_KEY  $CONTRACT_ADDR  "init(address)" $MY_ADDRESS
+# cast call --rpc-url $ENDPOINT  $CONTRACT_ADDR  "balanceOf(address)" $MY_ADDRESS
+# cast send --rpc-url $ENDPOINT  --private-key $PRIVATE_KEY  $CONTRACT_ADDR  "mint(address,uint256)" $MY_ADDRESS 1024
 
 clean:
 	rm -rf interface-gen build erc20.wasm

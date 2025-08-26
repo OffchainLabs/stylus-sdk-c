@@ -27,7 +27,7 @@ extern "C" {
     /* Note: calling these functions will unproductively consume gas */ \
     __attribute__((export_name("mark_used")))                           \
     void mark_used() {                                                  \
-        memory_grow(0);                                                 \
+        pay_for_memory_grow(0);                                         \
     }                                                                   \
                                                                         \
     __attribute__((export_name("user_entrypoint")))                     \
@@ -36,6 +36,7 @@ extern "C" {
         read_args(args);                                                \
         const ArbResult result = user_main(args, args_len);             \
         write_result(result.output, result.output_len);                 \
+        storage_flush_cache(0);                                         \
         return result.status;                                           \
     }
 
