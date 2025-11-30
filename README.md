@@ -102,16 +102,6 @@ C binaries are both small and very efficient. The [`siphash`][siphash] example i
 
 How did we achieve this efficiency? All we had to do was Google for an example siphash program and add a simple entrypoint. In the Stylus model, you can deploy highly-optimized and thouroughly-audited, industry-standard reference implementations as-is. With the Stylus SDK, cryptography, algorithms, and other high-compute applications are both straightforward and economically viable.
 
-## Roadmap
-
-Stylus is currently testnet-only and not recommended for production use. This will change as we complete an audit and add additional features.
-
-Arbitrum [Orbit L3s][Orbit] may opt into Stylus at any time. Arbitrum One and Arbitrum Nova will upgrade to Stylus should the DAO vote for it.
-
-If you'd like to be a part of this journey, join us in the `#stylus` channel on [Discord][discord]!
-
-[Orbit]: https://docs.arbitrum.io/launch-orbit-chain/orbit-gentle-introduction
-
 ## Don't know C?
 
 The Stylus VM supports more than just C. In fact, any programming language that compiles down to WebAssembly could in principle be deployed to Stylus-enabled chains. The table below includes the official ports of the SDK, with more coming soon.
